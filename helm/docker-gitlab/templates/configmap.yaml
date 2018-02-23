@@ -5,10 +5,10 @@ metadata:
     app: "prometheus"
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     heritage: {{ .Release.Service }}
-    prometheus: {{ .Release.Name }}
+    prometheus: kube-prometheus
     release: {{ .Release.Name }}
     role: alert-rules
-  name: {{ template "exporter-node.fullname" . }}
+  name: {{ template "docker-gitlab.fullname" . }}
 data:
 {{- if .Values.prometheusRules }}
 {{- $root := . }}
@@ -17,6 +17,6 @@ data:
 {{ $val | indent 4}}
 {{- end }}
 {{ else }}
-  node.rules: |-
-    {{- include "node.rules.yaml.tpl" . | indent 4}}
+  docker-gitlab.rules: |-
+    {{- include "docker-gitlab.rules.yaml.tpl" . | indent 4}}
 {{ end }}

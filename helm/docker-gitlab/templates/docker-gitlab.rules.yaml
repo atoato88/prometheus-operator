@@ -1,0 +1,16 @@
+{{ define "docker-gitlab.rules.yaml.tpl" }}
+groups:
+- name: docker-gitlab.rules
+  rules:
+#  - record: instance:node_cpu:rate:sum
+#    expr: sum(rate(node_cpu{mode!="idle",mode!="iowait",mode!~"^(?:guest.*)$"}[3m]))
+#      BY (instance)
+  - alert: DockerGitlabDown
+    expr: absent(up{job="{{ template "docker-gitlab.fullname" .  }}"} == 1)
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape a docker-gitlab for more than 10m,
+        or docker-gitlab have disappeared from discovery
+{{ end }}
